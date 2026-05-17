@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PortfolioBuilder — Final Year Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="pb-app" id="app">
+
+  <!-- NAV -->
+  <nav class="pb-nav">
+    <div class="pb-logo">
+      PortfolioBuilder
+      <span>FINAL YEAR PROJECT</span>
+    </div>
+    <button class="nav-tab active" id="nav-templates" onclick="showGallery()">🏠 Templates</button>
+    <button class="nav-tab" id="nav-editor" onclick="showEditor()">✏️ Editor</button>
+    <button class="nav-btn btn-ghost" style="font-size:12px">📖 Docs</button>
+    <button class="nav-btn btn-primary" id="nav-cta" onclick="handleCTA()">🚀 Start Building</button>
+  </nav>
+
+  <!-- GALLERY PAGE -->
+  <div id="page-gallery" style="flex:1;overflow-y:auto">
+
+    <!-- Hero -->
+    <div class="pb-hero">
+      <h1>Build Your <em>Portfolio</em><br>Without Code</h1>
+      <p>Choose from 30 stunning templates, fill in your details, and download a complete ready-to-host website in seconds.</p>
+      <div class="hero-badges">
+        <span class="badge accent">✓ 30 Templates</span>
+        <span class="badge accent">✓ Live Preview</span>
+        <span class="badge accent">✓ Free Download</span>
+        <span class="badge">No coding required</span>
+        <span class="badge">Mobile responsive</span>
+        <span class="badge">GitHub Pages ready</span>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="nav-btn btn-primary" style="padding:12px 28px;font-size:16px" onclick="selectTemplate(0)">🚀 Start Building — It's Free</button>
+        <button class="nav-btn btn-ghost" style="padding:12px 28px;font-size:16px" onclick="openPreviewModal(0)">👀 See Live Demo</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div style="display:flex;gap:24px;padding:0 24px 16px;flex-wrap:wrap;align-items:center">
+      <div class="stats-bar" style="padding:0;background:none;border:none;gap:24px">
+        <div class="stat"><div class="stat-val">30</div><div class="stat-lbl">Templates</div></div>
+        <div class="stat"><div class="stat-val">5</div><div class="stat-lbl">Categories</div></div>
+        <div class="stat"><div class="stat-val">100%</div><div class="stat-lbl">Free</div></div>
+        <div class="stat"><div class="stat-val">∞</div><div class="stat-lbl">Downloads</div></div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="pb-filters">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-btn active" onclick="setFilter('All',this)">All</button>
+      <button class="filter-btn" onclick="setFilter('Student',this)">Student</button>
+      <button class="filter-btn" onclick="setFilter('Developer',this)">Developer</button>
+      <button class="filter-btn" onclick="setFilter('Designer',this)">Designer</button>
+      <button class="filter-btn" onclick="setFilter('Freelancer',this)">Freelancer</button>
+      <input class="search-box" id="search-input" placeholder="🔍 Search templates..." oninput="renderGallery()">
+    </div>
+
+    <!-- Template Grid -->
+    <div class="pb-grid" id="template-grid"></div>
+    <div id="empty-state" class="empty-state" style="display:none">
+      <div class="empty-icon">🔍</div>
+      <div>No templates match your search.</div>
+      <div style="font-size:13px;margin-top:6px">Try different keywords or clear the filter.</div>
+    </div>
+  </div>
+
+  <!-- EDITOR PAGE -->
+  <div id="page-editor" style="display:none;flex:1;overflow:hidden">
+    <div class="pb-editor">
+
+      <!-- LEFT PANEL -->
+      <div class="pb-panel">
+        <!-- Progress -->
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0">
+          <div style="flex:1">
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Profile Completeness</div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+          </div>
+          <div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:var(--accent)" id="progress-pct">0%</div>
+        </div>
+
+        <!-- Panel Tabs -->
+        <div class="panel-tabs">
+          <div class="panel-tab active" onclick="setPanelTab('content',this)">📝 Content</div>
+          <div class="panel-tab" onclick="setPanelTab('design',this)">🎨 Design</div>
+          <div class="panel-tab" onclick="setPanelTab('sections',this)">👁 Sections</div>
+        </div>
+
+        <!-- Panel Body -->
+        <div class="panel-body" id="panel-body"></div>
+
+        <!-- Download Button -->
+        <div style="padding:16px;border-top:1px solid var(--border);flex-shrink:0">
+          <div id="dl-success" style="display:none;text-align:center;color:var(--accent3);font-weight:700;padding:10px 0">✅ Downloaded successfully!</div>
+          <button class="nav-btn btn-success" id="dl-btn" style="width:100%;padding:14px;font-size:15px" onclick="handleDownload()">⬇️ Download Portfolio (ZIP)</button>
+          <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px">Includes index.html + style.css + script.js</div>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL - PREVIEW -->
+      <div class="pb-preview-area">
+        <div class="preview-toolbar">
+          <span class="preview-toolbar-title" id="preview-title">LIVE PREVIEW</span>
+          <div id="completeness-badge" style="font-size:12px;color:var(--text3);padding:4px 10px;background:var(--surface2);border-radius:20px;border:1px solid var(--border)">🟡 Fill in more details</div>
+          <div class="device-btns">
+            <button class="device-btn active" title="Desktop" onclick="setDevice('desktop',this)">🖥</button>
+            <button class="device-btn" title="Tablet" onclick="setDevice('tablet',this)">📱</button>
+            <button class="device-btn" title="Mobile" onclick="setDevice('mobile',this)">📲</button>
+          </div>
+        </div>
+        <div class="preview-scroll">
+          <div class="preview-frame-wrapper desktop" id="preview-wrapper">
+            <div class="preview-container" id="preview-container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PREVIEW MODAL -->
+<div id="preview-modal" class="modal-overlay" style="display:none" onclick="closePreviewModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <span id="modal-emoji" style="font-size:24px"></span>
+      <div class="modal-title" id="modal-title"></div>
+      <div style="display:flex;gap:10px">
+        <button class="nav-btn btn-ghost" onclick="closePreviewModal()">← Back</button>
+        <button class="nav-btn btn-primary" onclick="useModalTemplate()">Use This Template →</button>
+      </div>
+    </div>
+    <div class="modal-scroll">
+      <div style="background:white;border-radius:12px;overflow:hidden;border:1px solid var(--border)" id="modal-preview-container"></div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
